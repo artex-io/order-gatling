@@ -1,0 +1,8 @@
+.vscode
+.idea
+.go-build-flags
+go.work*
+*.conf
+fix
+vendor/
+dist/
