@@ -10,9 +10,9 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/quickfixgo/enum"
+	"github.com/quickfixgo/fix50sp2/executionreport"
+	"github.com/quickfixgo/fix50sp2/quotestatusreport"
 	"github.com/quickfixgo/quickfix"
-	"github.com/sylr/quickfixgo-fix50sp2/executionreport"
-	"github.com/sylr/quickfixgo-fix50sp2/quotestatusreport"
 )
 
 var (

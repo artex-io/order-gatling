@@ -6,8 +6,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/field"
+	"github.com/quickfixgo/fix50sp2/ordercancelreplacerequest"
 	"github.com/quickfixgo/quickfix"
-	"github.com/sylr/quickfixgo-fix50sp2/ordercancelreplacerequest"
 )
 
 type OrderHandler struct {
@@ -70,6 +70,10 @@ func (o *OrderHandler) buildOrderCancelReplaceRequest() (quickfix.Messagable, st
 	partyIds := partyIdsGroup.Add()
 	partyIds.Set(field.NewPartyID(o.account))
 	partyIds.Set(field.NewPartyRole(enum.PartyRole_CUSTOMER_ACCOUNT))
+	partyIds = partyIdsGroup.Add()
+	partyIds.Set(field.NewPartyID("ATH"))
+	partyIds.Set(field.NewPartyIDSource(enum.PartyIDSource_CHINESE_INVESTOR_ID))
+	partyIds.Set(field.NewPartyRole(enum.PartyRole_INVESTMENT_DECISION_MAKER))
 	order.SetNoPartyIDs(partyIdsGroup)
 	return order, clOrdId
 }

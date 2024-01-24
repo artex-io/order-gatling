@@ -10,10 +10,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/field"
+	"github.com/quickfixgo/fix50sp2/newordersingle"
+	"github.com/quickfixgo/fix50sp2/ordermasscancelrequest"
 	"github.com/quickfixgo/quickfix"
 	"github.com/shopspring/decimal"
-	"github.com/sylr/quickfixgo-fix50sp2/newordersingle"
-	"github.com/sylr/quickfixgo-fix50sp2/ordermasscancelrequest"
 )
 
 type Handler interface {
@@ -58,6 +58,10 @@ func buildNewOrderSingle(side enum.Side, price float64, symbol string, account s
 	partyIds := partyIdsGroup.Add()
 	partyIds.Set(field.NewPartyID(account))
 	partyIds.Set(field.NewPartyRole(enum.PartyRole_CUSTOMER_ACCOUNT))
+	partyIds = partyIdsGroup.Add()
+	partyIds.Set(field.NewPartyID("ATH"))
+	partyIds.Set(field.NewPartyIDSource(enum.PartyIDSource_CHINESE_INVESTOR_ID))
+	partyIds.Set(field.NewPartyRole(enum.PartyRole_INVESTMENT_DECISION_MAKER))
 	order.SetNoPartyIDs(partyIdsGroup)
 	return order, clOrdId
 }
@@ -76,6 +80,10 @@ func BuildMassCancelRequest(side enum.Side, symbol string, account string) quick
 	partyIds := partyIdsGroup.Add()
 	partyIds.Set(field.NewPartyID(account))
 	partyIds.Set(field.NewPartyRole(enum.PartyRole_CUSTOMER_ACCOUNT))
+	partyIds = partyIdsGroup.Add()
+	partyIds.Set(field.NewPartyID("ATH"))
+	partyIds.Set(field.NewPartyIDSource(enum.PartyIDSource_CHINESE_INVESTOR_ID))
+	partyIds.Set(field.NewPartyRole(enum.PartyRole_INVESTMENT_DECISION_MAKER))
 	massCancel.SetNoPartyIDs(partyIdsGroup)
 	return massCancel
 }
