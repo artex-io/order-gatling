@@ -6,9 +6,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/quickfixgo/enum"
 	"github.com/quickfixgo/field"
+	"github.com/quickfixgo/fix50sp2/quote"
+	"github.com/quickfixgo/fix50sp2/quotecancel"
 	"github.com/quickfixgo/quickfix"
-	"github.com/sylr/quickfixgo-fix50sp2/quote"
-	"github.com/sylr/quickfixgo-fix50sp2/quotecancel"
 )
 
 type QuoteHandler struct {
@@ -54,6 +54,10 @@ func (q *QuoteHandler) BuildAllCancelRequest(symbols []string) quickfix.Messagab
 	partyIds := partyIdsGroup.Add()
 	partyIds.Set(field.NewPartyID(q.account))
 	partyIds.Set(field.NewPartyRole(enum.PartyRole_CUSTOMER_ACCOUNT))
+	partyIds = partyIdsGroup.Add()
+	partyIds.Set(field.NewPartyID("ATH"))
+	partyIds.Set(field.NewPartyIDSource(enum.PartyIDSource_CHINESE_INVESTOR_ID))
+	partyIds.Set(field.NewPartyRole(enum.PartyRole_INVESTMENT_DECISION_MAKER))
 	quoteCancel.SetNoPartyIDs(partyIdsGroup)
 	return quoteCancel
 }
@@ -76,6 +80,10 @@ func (q *QuoteHandler) BuildOrderRequest() (quickfix.Messagable, string) {
 	partyIds := partyIdsGroup.Add()
 	partyIds.Set(field.NewPartyID(q.account))
 	partyIds.Set(field.NewPartyRole(enum.PartyRole_CUSTOMER_ACCOUNT))
+	partyIds = partyIdsGroup.Add()
+	partyIds.Set(field.NewPartyID("ATH"))
+	partyIds.Set(field.NewPartyIDSource(enum.PartyIDSource_CHINESE_INVESTOR_ID))
+	partyIds.Set(field.NewPartyRole(enum.PartyRole_INVESTMENT_DECISION_MAKER))
 	quoteMsg.SetNoPartyIDs(partyIdsGroup)
 	return quoteMsg, clOrdId
 }
