@@ -75,8 +75,8 @@ func NewManager(
 			} else {
 				mgr.orders = append(
 					mgr.orders,
-					NewOrderHandler(symbol, refPrices[idx]-offset, enum.Side_BUY, account),
-					NewOrderHandler(symbol, refPrices[idx]+offset, enum.Side_SELL, account),
+					NewOrderHandler(symbol, refPrices[idx], enum.Side_BUY, account),
+					NewOrderHandler(symbol, refPrices[idx], enum.Side_SELL, account),
 				)
 			}
 		}

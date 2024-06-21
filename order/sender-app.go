@@ -62,11 +62,7 @@ var (
 )
 
 // NewOrderSender creates an Application which implements quickfix.Application.
-func NewOrderSender(
-	ctx context.Context,
-	quickFixAppMessageLogger fixutils.QuickFixAppMessageLogger,
-	settings *quickfix.Settings,
-	sessionConfig *config.Session) (*SenderApp, error) {
+func NewOrderSender(ctx context.Context, quickFixAppMessageLogger fixutils.QuickFixAppMessageLogger, settings *quickfix.Settings, sessionConfig *config.Session) (*SenderApp, error) {
 	app := SenderApp{
 		QuickFixAppMessageLogger:      quickFixAppMessageLogger,
 		MessageRouter:                 quickfix.NewMessageRouter(),

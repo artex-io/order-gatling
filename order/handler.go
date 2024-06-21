@@ -50,8 +50,8 @@ func buildNewOrderSingle(side enum.Side, price float64, symbol string, account s
 		field.NewTransactTime(time.Now()),
 		field.NewOrdType(enum.OrdType_LIMIT),
 	)
-	order.Set(field.NewOrderQty(generateOrderQuantity(), 0))
-	order.Set(field.NewPrice(generatePrice(price), 2))
+	order.Set(field.NewOrderQty(decimal.NewFromInt(10), 0))
+	order.Set(field.NewPrice(decimal.NewFromFloat(price), 2))
 	order.Set(field.NewSymbol(symbol))
 	order.Set(field.NewTimeInForce(enum.TimeInForce_DAY))
 	partyIdsGroup := newordersingle.NewNoPartyIDsRepeatingGroup()

@@ -42,11 +42,11 @@ func (o *OrderHandler) BuildMassCancelRequest() quickfix.Messagable {
 }
 
 func (o *OrderHandler) BuildOrderRequest() (quickfix.Messagable, string) {
-	if len(o.lastClOrdId) > 0 {
-		return o.buildOrderCancelReplaceRequest()
-	} else {
-		return o.buildNewOrderSingle()
-	}
+	//if len(o.lastClOrdId) > 0 {
+	//	return o.buildOrderCancelReplaceRequest()
+	//} else {
+	return o.buildNewOrderSingle()
+	//}
 }
 
 func (o *OrderHandler) buildNewOrderSingle() (quickfix.Messagable, string) {

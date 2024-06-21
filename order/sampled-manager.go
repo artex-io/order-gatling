@@ -83,14 +83,14 @@ func (m *SampledManager) CancelAllOrders() {
 }
 
 func (m *SampledManager) Start() {
-	interval := 1000000 / m.nbOrderPerSec
+	interval := 1000000 / (m.nbOrderPerSec / 2) // /2 because we send 2 orders per iteration
 	tick := time.After(time.Duration(interval) * time.Microsecond)
 	go func() {
 
 		for {
 			select {
 			case <-tick:
-				err := m.sendOrderRequest()
+				err := m.sendTrade()
 				if err != nil {
 					m.app.Logger.Err(err).Msg("Stopping order sending routine")
 					return
@@ -106,20 +106,23 @@ func (m *SampledManager) Start() {
 	}()
 }
 
-func (m *SampledManager) sendOrderRequest() error {
-	refPrice := m.refPrices[rand.Intn(len(m.refPrices))]
-	symbol := m.symbols[rand.Intn(len(m.symbols))]
+func (m *SampledManager) sendTrade() error {
+	id := rand.Intn(len(m.refPrices))
+	refPrice := m.refPrices[id]
+	symbol := m.symbols[id]
+	err := m.sendOrderRequest(enum.Side_BUY, symbol, refPrice)
+	if err != nil {
+		return err
+	}
+	return m.sendOrderRequest(enum.Side_SELL, symbol, refPrice)
+}
+
+func (m *SampledManager) sendOrderRequest(side enum.Side, symbol string, refPrice float64) error {
+
 	account := m.accounts[rand.Intn(len(m.accounts))]
 	var order quickfix.Messagable
 	var clOrdId string
-	switch rand.Intn(2) {
-	case 0:
-		order, clOrdId = buildNewOrderSingle(enum.Side_BUY, refPrice-0.10, symbol, account)
-	case 1:
-		order, clOrdId = buildNewOrderSingle(enum.Side_SELL, refPrice+0.10, symbol, account)
-	default:
-		return errors.New("invalid side")
-	}
+	order, clOrdId = buildNewOrderSingle(side, refPrice, symbol, account)
 	m.setOrderTimestamp(clOrdId)
 	err := quickfix.SendToTarget(order, m.app.sessionId)
 	if err != nil {
